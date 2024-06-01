@@ -1,13 +1,14 @@
-package com.app.GroupMatching.services;
+package com.app.GroupMatching.services.Impl;
 
 import com.app.GroupMatching.entities.*;
+import com.app.GroupMatching.services.Interfaces.MatchServiceI;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class MatchService {
+public class MatchService implements MatchServiceI {
     public double calculateMatchPercentage(User user, Group group) {
         double skillMatch = calculateSkillMatch(user.getSkills(), group.getGroupSkills());
         double languageMatch = calculateLanguageMatch(user.getLanguages(), group.getGroupLanguages());
