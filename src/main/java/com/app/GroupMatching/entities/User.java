@@ -30,6 +30,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "birth_date")
     private LocalDate birthDate;
     private int likes;
+    @Column(name = "profile_photo_url")
+    private String profilePhotoURL;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserSkill> skills;

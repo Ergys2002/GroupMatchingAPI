@@ -7,10 +7,7 @@ import com.app.GroupMatching.dto.requests.RegisterRequest;
 import com.app.GroupMatching.dto.responses.AuthenticationResponse;
 import com.app.GroupMatching.entities.*;
 import com.app.GroupMatching.repositories.UserRepository;
-import com.app.GroupMatching.services.Impl.InterestService;
-import com.app.GroupMatching.services.Impl.LanguageService;
-import com.app.GroupMatching.services.Impl.MultipleMatchService;
-import com.app.GroupMatching.services.Impl.SkillService;
+import com.app.GroupMatching.services.MultipleMatchService;
 import com.app.GroupMatching.services.interfaces.IGroupService;
 import com.app.GroupMatching.services.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -42,6 +40,7 @@ public class UserService implements IUserService {
     private final SkillService skillService;
 
     @Override
+    @Transactional
     public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
 
         User fromDb = userRepository.findByEmail(request.getEmail());
@@ -50,15 +49,12 @@ public class UserService implements IUserService {
         if (fromDb == null) {
 
             List<Skill> skills = skillService
-                    .findSkillsBasedOnId(request.getSkills_id());
+                    .findSkillsBasedOnId(request.getSkillsId());
             List<Language> languages = languageService
-                    .findLanguageBasedOnId(request.getLanguages_id());
+                    .findLanguageBasedOnId(request.getLanguagesId());
             List<Interest> interests = interestService
-                    .findInterestBasedOnId(request.getInterest_id());
+                    .findInterestBasedOnId(request.getInterestId());
 
-            Set<UserSkill> userSkills = skills.stream().map(skill -> new UserSkill(fromDb, skill)).collect(Collectors.toSet());
-            Set<UserLanguage> userLanguage = languages.stream().map(language -> new UserLanguage(fromDb , language)).collect(Collectors.toSet());
-            Set<UserInterest> userInterests = interests.stream().map(interest -> new UserInterest(fromDb , interest)).collect(Collectors.toSet());
 
 
             var user = User.builder()
@@ -70,10 +66,15 @@ public class UserService implements IUserService {
                     .phoneNumber(request.getPhoneNumber())
                     .likes(0)
                     .position(request.getPosition())
-                    .skills(userSkills)
-                    .languages(userLanguage)
-                    .interests(userInterests)
                     .build();
+
+            Set<UserSkill> userSkills = skills.stream().map(skill -> new UserSkill(user, skill)).collect(Collectors.toSet());
+            Set<UserLanguage> userLanguages = languages.stream().map(language -> new UserLanguage(user , language)).collect(Collectors.toSet());
+            Set<UserInterest> userInterests = interests.stream().map(interest -> new UserInterest(user , interest)).collect(Collectors.toSet());
+
+            user.setLanguages(userLanguages);
+            user.setInterests(userInterests);
+            user.setSkills(userSkills);
 
             User savedUser = userRepository.save(user);
             List<Group> groups = groupService.getAllGroups();
@@ -130,6 +131,10 @@ public class UserService implements IUserService {
 
     public ResponseEntity<?> getUsersMatchingWithAGroupByGroupId(Long id){
         return null;
+    }
+
+    public User getUserById(Long id){
+       return userRepository.findById(id).orElse(null);
     }
 
 }

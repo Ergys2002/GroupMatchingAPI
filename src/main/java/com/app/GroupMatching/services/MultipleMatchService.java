@@ -1,10 +1,9 @@
-package com.app.GroupMatching.services.Impl;
+package com.app.GroupMatching.services;
 
 import com.app.GroupMatching.entities.Group;
 import com.app.GroupMatching.entities.Match;
 import com.app.GroupMatching.entities.User;
 import com.app.GroupMatching.repositories.MatchRepository;
-import com.app.GroupMatching.services.Interfaces.MultipleMatchServiceI;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class MultipleMatchService implements MultipleMatchServiceI {
+public class MultipleMatchService{
 
     private static final Logger logger = LoggerFactory.getLogger(MultipleMatchService.class);
 

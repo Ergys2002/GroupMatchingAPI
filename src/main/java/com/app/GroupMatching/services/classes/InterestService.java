@@ -1,4 +1,4 @@
-package com.app.GroupMatching.services.Impl;
+package com.app.GroupMatching.services.classes;
 
 import com.app.GroupMatching.entities.Interest;
 import com.app.GroupMatching.entities.Language;

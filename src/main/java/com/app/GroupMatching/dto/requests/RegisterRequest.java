@@ -25,7 +25,7 @@ public class RegisterRequest {
     private String phoneNumber;
     private String position;
     private int likes;
-    private List<Long> interest_id;
-    private List<Long> languages_id;
-    private List<Long> skills_id;
+    private List<Long> interestId;
+    private List<Long> languagesId;
+    private List<Long> skillsId;
 }
