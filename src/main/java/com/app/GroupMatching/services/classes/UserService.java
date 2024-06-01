@@ -105,4 +105,8 @@ public class UserService implements IUserService {
                 .build(), HttpStatus.ACCEPTED);
     }
 
+    public ResponseEntity<?> getUsersMatchingWithAGroupByGroupId(Long id){
+        return null;
+    }
+
 }
