@@ -3,6 +3,7 @@ package com.app.GroupMatching.services.classes;
 
 import com.app.GroupMatching.config.JwtService;
 import com.app.GroupMatching.dto.requests.AuthenticationRequest;
+import com.app.GroupMatching.dto.requests.PreferencesRequest;
 import com.app.GroupMatching.dto.requests.RegisterRequest;
 import com.app.GroupMatching.dto.responses.AuthenticationResponse;
 import com.app.GroupMatching.entities.*;
@@ -39,6 +40,10 @@ public class UserService implements IUserService {
     private final LanguageService languageService;
     private final SkillService skillService;
 
+    public List<User> findAll(){
+        return userRepository.findAll();
+    }
+
     @Override
     @Transactional
     public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
@@ -47,15 +52,6 @@ public class UserService implements IUserService {
 
         System.out.println(fromDb);
         if (fromDb == null) {
-
-            List<Skill> skills = skillService
-                    .findSkillsBasedOnId(request.getSkillsId());
-            List<Language> languages = languageService
-                    .findLanguageBasedOnId(request.getLanguagesId());
-            List<Interest> interests = interestService
-                    .findInterestBasedOnId(request.getInterestId());
-
-
 
             var user = User.builder()
                     .name(request.getName())
@@ -68,15 +64,8 @@ public class UserService implements IUserService {
                     .position(request.getPosition())
                     .build();
 
-            Set<UserSkill> userSkills = skills.stream().map(skill -> new UserSkill(user, skill)).collect(Collectors.toSet());
-            Set<UserLanguage> userLanguages = languages.stream().map(language -> new UserLanguage(user , language)).collect(Collectors.toSet());
-            Set<UserInterest> userInterests = interests.stream().map(interest -> new UserInterest(user , interest)).collect(Collectors.toSet());
-
-            user.setLanguages(userLanguages);
-            user.setInterests(userInterests);
-            user.setSkills(userSkills);
-
             User savedUser = userRepository.save(user);
+
             List<Group> groups = groupService.getAllGroups();
             if (groups != null){
                 multipleMatchService.addMatchesForNewUser(savedUser, new HashSet<>(groups));
@@ -128,13 +117,46 @@ public class UserService implements IUserService {
                                 .toLocalDate())
                 .build(), HttpStatus.ACCEPTED);
     }
-
-    public ResponseEntity<?> getUsersMatchingWithAGroupByGroupId(Long id){
-        return null;
+    @Override
+    public ResponseEntity<?> getUsersMatchingWithAGroupByGroupId(Long groupId){
+            Group groupById = groupService.getGroupById(groupId);
+            Set<User> users = new HashSet<>();
+            groupById.getMatches().stream().forEach(
+                    match -> users.add(match.getUser())
+            );
+            return new ResponseEntity<>(users,HttpStatus.OK);
     }
 
+    @Override
     public User getUserById(Long id){
        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public User saveUserPreferences(Long userId, PreferencesRequest preferencesRequest){
+
+        User user = userRepository.findById(userId).get();
+
+        Set<UserLanguage> languages  = languageService
+                .findLanguageBasedOnId(preferencesRequest.getLanguagesId())
+               .stream().map(language -> new UserLanguage(user,language))
+                .collect(Collectors.toSet());
+
+        Set<UserInterest> interests  = interestService
+                .findInterestBasedOnId(preferencesRequest.getInterestId())
+                .stream().map(interest -> new UserInterest(user,interest))
+                .collect(Collectors.toSet());
+
+        Set<UserSkill> skills  = skillService
+                .findSkillsBasedOnId(preferencesRequest.getSkillsId())
+                .stream().map(skill -> new UserSkill(user,skill))
+                .collect(Collectors.toSet());
+
+        user.setLanguages(languages);
+        user.setInterests(interests);
+        user.setSkills(skills);
+
+        return userRepository.save(user);
     }
 
 }

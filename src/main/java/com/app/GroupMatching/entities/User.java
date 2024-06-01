@@ -1,6 +1,8 @@
 package com.app.GroupMatching.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,9 +45,11 @@ public class User extends BaseEntity implements UserDetails {
     private Set<UserLanguage> languages;
 
     @OneToMany(mappedBy = "sender")
+    @JsonManagedReference
     private Set<Notification> notificationsSent;
 
     @OneToMany(mappedBy = "recipient")
+    @JsonManagedReference
     private Set<Notification> notificationsReceived;
 
     @OneToMany(mappedBy = "leader")

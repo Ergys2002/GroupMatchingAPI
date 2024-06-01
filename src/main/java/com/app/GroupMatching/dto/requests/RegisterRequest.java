@@ -24,8 +24,4 @@ public class RegisterRequest {
     private LocalDate birthDate;
     private String phoneNumber;
     private String position;
-    private int likes;
-    private List<Long> interestId;
-    private List<Long> languagesId;
-    private List<Long> skillsId;
 }

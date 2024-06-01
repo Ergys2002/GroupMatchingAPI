@@ -1,6 +1,9 @@
 package com.app.GroupMatching.entities;
 
 import com.app.GroupMatching.enums.GroupStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Group extends BaseEntity{
+
     @Enumerated(EnumType.STRING)
     private GroupStatus status;
 
@@ -20,7 +24,8 @@ public class Group extends BaseEntity{
     @JoinColumn(name = "leader_id", referencedColumnName = "id")
     private User leader;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<GroupMember> groupMembers;
 
     @OneToMany(mappedBy = "group")

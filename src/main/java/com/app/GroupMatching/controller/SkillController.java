@@ -1,4 +1,4 @@
-package com.app.GroupMatching.controllers;
+package com.app.GroupMatching.controller;
 
 import com.app.GroupMatching.entities.Skill;
 import com.app.GroupMatching.services.Interfaces.SkillServiceI;
