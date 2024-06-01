@@ -1,6 +1,7 @@
 package com.app.GroupMatching.services.classes;
 
 import com.app.GroupMatching.dto.requests.GroupCreateRequest;
+import com.app.GroupMatching.dto.responses.GroupResponse;
 import com.app.GroupMatching.entities.*;
 import com.app.GroupMatching.enums.GroupStatus;
 import com.app.GroupMatching.repositories.GroupRepository;
@@ -37,14 +38,28 @@ public class GroupService implements IGroupService {
         return groupRepository.getReferenceById(groupId);
     }
 
-    public Set<Group> getGroupsBasedOnUserAndSortedByMatchPercentage(
+    public Set<GroupResponse> getGroupsBasedOnUserAndSortedByMatchPercentage(
             Long userId
     ){
       Set<Match> matches = matchRepository
               .findAllByUserOrderByMatchPercentageDesc(
                       userRepository.findById(userId).orElse(null));
 
-        return matches.stream().map(Match::getGroup).collect(Collectors.toSet());
+        Set<Group> groups = matches.stream().map(Match::getGroup).collect(Collectors.toSet());
+
+        Set<GroupResponse> groupResponses = groups.stream().map(group -> GroupResponse.builder()
+                .title(group.getTitle())
+                .leader(group.getLeader())
+                .capacity(group.getCapacity())
+                .description(group.getDescription())
+                .logoURL(group.getLogoURL())
+                .groupMembers(group.getGroupMembers())
+                .groupLanguages(group.getGroupLanguages())
+                .groupSkills(group.getGroupSkills())
+                .build()
+        ).collect(Collectors.toSet());
+
+        return groupResponses;
     }
 
 
