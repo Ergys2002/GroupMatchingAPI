@@ -1,11 +1,15 @@
 package com.app.GroupMatching.dto.requests;
 
+import com.app.GroupMatching.entities.Interest;
+import com.app.GroupMatching.entities.Language;
+import com.app.GroupMatching.entities.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Data
@@ -21,4 +25,7 @@ public class RegisterRequest {
     private String phoneNumber;
     private String position;
     private int likes;
+    private List<Long> interest_id;
+    private List<Long> languages_id;
+    private List<Long> skills_id;
 }

@@ -1,21 +1,21 @@
-package com.app.GroupMatching.services;
+package com.app.GroupMatching.services.Impl;
 
-import com.app.GroupMatching.repositories.MatchRepository;
 import com.app.GroupMatching.entities.Group;
 import com.app.GroupMatching.entities.Match;
 import com.app.GroupMatching.entities.User;
+import com.app.GroupMatching.repositories.MatchRepository;
+import com.app.GroupMatching.services.Interfaces.MultipleMatchServiceI;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class MultipleMatchService {
+public class MultipleMatchService implements MultipleMatchServiceI {
 
     private static final Logger logger = LoggerFactory.getLogger(MultipleMatchService.class);
 
@@ -23,7 +23,7 @@ public class MultipleMatchService {
     private final MatchRepository matchRepository;
 
     @Transactional
-    public void addMatchesForNewUser(User newUser, List<Group> groups){
+    public void addMatchesForNewUser(User newUser, Set<Group> groups){
         try {
             for (Group group : groups) {
                 double matchPercentage = matchService.calculateMatchPercentage(newUser, group);
@@ -41,7 +41,7 @@ public class MultipleMatchService {
     }
 
     @Transactional
-    public void addMatchesForNewGroup(Group newGroup, List<User> users){
+    public void addMatchesForNewGroup(Group newGroup, Set<User> users){
         try {
             for (User user : users) {
                 double matchPercentage = matchService.calculateMatchPercentage(user, newGroup);
