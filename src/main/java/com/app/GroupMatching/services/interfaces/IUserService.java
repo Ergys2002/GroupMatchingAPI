@@ -13,4 +13,6 @@ public interface IUserService {
     ResponseEntity<AuthenticationResponse> register(RegisterRequest request);
     User saveUserPreferences(Long userId, PreferencesRequest preferencesRequest);
     ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request);
+
+    User getUserById(Long id);
 }

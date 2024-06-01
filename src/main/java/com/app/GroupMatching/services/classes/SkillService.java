@@ -1,6 +1,5 @@
 package com.app.GroupMatching.services.classes;
 
-import com.app.GroupMatching.entities.Interest;
 import com.app.GroupMatching.entities.Skill;
 import com.app.GroupMatching.repositories.SkillRepository;
 import com.app.GroupMatching.services.Interfaces.SkillServiceI;
