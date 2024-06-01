@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -22,7 +23,7 @@ public class MultipleMatchService {
     private final MatchRepository matchRepository;
 
     @Transactional
-    public void addMatchesForNewUser(User newUser, Set<Group> groups){
+    public void addMatchesForNewUser(User newUser, List<Group> groups){
         try {
             for (Group group : groups) {
                 double matchPercentage = matchService.calculateMatchPercentage(newUser, group);
@@ -40,7 +41,7 @@ public class MultipleMatchService {
     }
 
     @Transactional
-    public void addMatchesForNewGroup(Group newGroup, Set<User> users){
+    public void addMatchesForNewGroup(Group newGroup, List<User> users){
         try {
             for (User user : users) {
                 double matchPercentage = matchService.calculateMatchPercentage(user, newGroup);
