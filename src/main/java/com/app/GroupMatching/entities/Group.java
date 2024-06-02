@@ -40,6 +40,8 @@ public class Group extends BaseEntity{
     @OneToMany(mappedBy = "group")
     private Set<Match> matches;
 
+    private String description;
+
     private int capacity;
     private String title;
     @Column(name = "logo_url")

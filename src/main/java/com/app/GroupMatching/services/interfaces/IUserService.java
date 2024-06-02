@@ -14,5 +14,4 @@ public interface IUserService {
     User saveUserPreferences(Long userId, PreferencesRequest preferencesRequest);
     ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request);
 
-    User getUserById(Long id);
 }

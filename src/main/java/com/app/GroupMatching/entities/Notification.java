@@ -20,7 +20,11 @@ public class Notification extends BaseEntity{
     @JsonBackReference
     @JoinColumn(name = "sender_id", referencedColumnName = "id")
     private User sender;
+
     private String content;
+
+    @Column(name = "group_title")
+    private String groupTitle;
 
     @Enumerated(EnumType.STRING)
     private NotificationStatus status;
