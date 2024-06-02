@@ -1,6 +1,7 @@
 package com.app.GroupMatching.services.interfaces;
 
 import com.app.GroupMatching.dto.requests.GroupCreateRequest;
+import com.app.GroupMatching.dto.responses.GroupResponse;
 import com.app.GroupMatching.entities.Group;
 import org.springframework.http.ResponseEntity;
 
@@ -14,7 +15,7 @@ public interface IGroupService {
 
     public Group getGroupById(Long groupId);
 
-    public Set<Group> getGroupsBasedOnUserAndSortedByMatchPercentage(
+    public Set<GroupResponse> getGroupsBasedOnUserAndSortedByMatchPercentage(
             Long userId
     );
 }
