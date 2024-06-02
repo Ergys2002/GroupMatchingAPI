@@ -47,6 +47,5 @@ public class Group extends BaseEntity{
     @Column(name = "logo_url")
     private String logoURL;
 
-    private String description;
 
 }
